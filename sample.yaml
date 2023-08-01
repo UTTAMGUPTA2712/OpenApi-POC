@@ -1,0 +1,302 @@
+openapi: 3.0.0
+info:
+  title: User Request API
+  description: User Requests API
+  version: 1.0.0
+paths:
+  /user-requests:
+    post:
+      tags:
+        - User Request
+      summary: Creating a new User Request
+      description: Creating a new User Request in system
+      requestBody:
+        description: Create a new user request in the system
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      responses:
+        '201':
+          description: User request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreationResponseInfo'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        default:
+          description: Unexpected error
+    get:
+      tags:
+        - User Requests Data
+      description: Retrieve a list of user requests with optional filtering and pagination.
+      parameters:
+        - name: submittedBy
+          in: query
+          description: Filter user requests by the submitter's email address.
+          schema:
+            type: string
+        - name: businessDomain
+          in: query
+          description: Filter user requests by the business domain.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of user requests to return per page. Default is 10.
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: The page number of user requests to retrieve. Default is 1.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: All user requests data fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRequestsResponse'
+                
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        default:
+          description: Unexpected error
+
+  /user-requests/{uuid}:
+    get:
+      tags:
+        - User Requests Data
+      responses:
+        '200':
+          description: User Requests data of given uuid fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRequestsWithUUIdResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string        
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        default:
+          description: Unexpected error
+components:
+  schemas:
+    UserCreationResponseInfo:
+      type: object
+      properties:
+        uuid:
+          type: string
+        submittedAt:
+          type: string
+          format: date-time
+        submittedBy:
+          type: string
+        requestStatus:
+          type: string
+          enum:
+            - COMPLETED
+            - IN_PROGRESS
+        user:
+          $ref: '#/components/schemas/User'
+        userRequestemailAccounts:
+          $ref: '#/components/schemas/UserRequestEmailAccounts'
+        userRequestPlatforms:
+          $ref: '#/components/schemas/UserRequestPlatforms'
+        userRequestCampuses:
+          $ref: '#/components/schemas/UserRequestCampuses'
+        userRequestBscwUserTools:
+          $ref: '#/components/schemas/UserRequestBscwUserTools'
+    UserRequestsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        UserRequestsDataLength: 
+          type: integer
+        UserRequestsData:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRequest'
+    UserRequestsWithUUIdResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        UserRequestsData:
+          $ref: '#/components/schemas/UserRequest'
+    User:
+      type: object
+      properties:
+        businessDomain:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          type: string
+        headquarters:
+          type: string
+          enum:
+            - HQ1
+            - HQ2
+            - HQ3
+        additionalComments:
+          type: string
+      required:
+        - businessDomain
+        - firstName
+        - lastName
+        - headquarters
+    UserRequestEmailAccounts:
+      type: array
+      items:
+        type: object
+        properties:
+          accountName:
+            type: string
+          workspace:
+            type: string
+            enum:
+              - Workspace 1
+              - Workspace 2
+              - Workspace 3
+          WorkSpaceEmail:
+            type: string
+        required:
+          - WorkSpaceEmail
+    UserRequestPlatforms:
+      type: object
+      properties:
+        accountName:
+          type: string
+        systems:
+          type: array
+          items:
+            type: object
+            properties:
+              system:
+                type: string
+                enum:
+                  - System1
+                  - System2
+                  - System3
+              headquarters:
+                type: array
+                items:
+                  type: string
+                  enum:
+                    - HQ1
+                    - HQ2
+                    - HQ3
+              apps:
+                type: array
+                items:
+                  type: string
+                  enum:
+                    - App1
+                    - App2
+                    - App3
+        
+    UserRequestCampuses:
+      type: object
+      properties:
+        accountName:
+          type: string
+        campusAreasInfo:
+          type: array
+          items:
+            type: object
+            properties:
+              campus:
+                type: string
+                enum:
+                  - Campus 1
+                  - Campus 2 
+                  - Campus 3
+              areas:
+                type: array
+                items:
+                  type: string
+                enum:
+                  - Area 1
+                  - Area 2
+                  - Area 3
+        
+    UserRequestBscwUserTools:
+      type: object
+      properties:
+        userName:
+          type: string
+        contactEmail:
+          type: string
+          format: email
+        directories:
+          type: array
+          items:
+            type: string
+        internalTrainingCourses:
+          type: array
+          items:
+            type: string
+    UserRequest:
+      type: object
+      properties:
+        submittedBy:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        userRequestEmailAccounts:
+          $ref: '#/components/schemas/UserRequestEmailAccounts'
+        userRequestPlatforms:
+          $ref: '#/components/schemas/UserRequestPlatforms'
+        userRequestCampuses:
+          $ref: '#/components/schemas/UserRequestCampuses'
+        userRequestBscwUserTools:
+          $ref: '#/components/schemas/UserRequestBscwUserTools'
+      required:
+        - submittedBy
+        - user
+        - userRequestEmailAccounts
+        

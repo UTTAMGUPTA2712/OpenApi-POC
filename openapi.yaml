@@ -1,0 +1,348 @@
+openapi: "3.0.2"
+info:
+  title: Ecommerce API
+  description: Ecommerce website with different types of users account and multiple functionality
+  version: "1.0.0"
+  contact:
+    email: uttamgupta2712@gmail.com
+    name: Uttam Gupta
+servers:
+  - url: https://localhost:1000/
+paths:
+  /Login:
+    post:
+      tags:
+        - "auth"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /Signup:
+    post:
+      tags:
+        - "auth"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /Google:
+    post:
+      tags:
+        - "auth"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /placeorder:
+    post:
+      tags:
+        - "order"
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /orders:
+    get:
+      tags:
+        - "order"
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /orderstatus:
+    post:
+      tags:
+        - "order"
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /orderss:
+    post:
+      tags:
+        - "order"
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /additem:
+    post:
+      tags:
+        - "product"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /product:
+    get:
+      tags:
+        - "product"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /bestproduct:
+    get:
+      tags:
+        - "product"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /updateproduct:
+    post:
+      tags:
+        - "product"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /productstatus:
+    post:
+      tags:
+        - "product"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /deleteproduct:
+    post:
+      tags:
+        - "product"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /productreview:
+    post:
+      tags:
+        - "product"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /getAllUser:
+    get:
+      tags:
+        - "user"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /editprofile:
+    post:
+      tags:
+        - "user"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /updateuserstatus:
+    post:
+      tags:
+        - "user"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /addcategory:
+    post:
+      tags:
+        - "category"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /deletecategory:
+    post:
+      tags:
+        - "category"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /getcategory:
+    get:
+      tags:
+        - "category"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /createcarousal:
+    post:
+      tags:
+        - "carousal"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /deletecarousal:
+    post:
+      tags:
+        - "carousal"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /getcarousal:
+    get:
+      tags:
+        - "carousal"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /addcoupon:
+    post:
+      tags:
+        - "coupon"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+
+  /disablecoupon:
+    post:
+      tags:
+        - "coupon"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+
+  /getcoupon:
+    get:
+      tags:
+        - "coupon"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+  /uploads:
+    post:
+      tags:
+        - "uploads"
+      parameters: []
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    User:
+      type: object
+      properties:    
+        email: 
+          type: string
+        password: 
+          type: string
+          default: "Password"
+        phoneNumber: 
+          type: string
+        name:
+          type: string
+        title: 
+          type: string
+        photo: 
+          type: string
+          default: ""
+        address: 
+          type: array
+          items:
+            $ref: "#/components/schemas/address"
+          default: []
+        orders: 
+          type: array
+          items:
+            $ref: "#/components/schemas/Order"
+          default: []
+        status: 
+          type: boolean
+        cart:
+          type: object
+    Product:
+      type: object
+      properties:
+        review:
+          type: array
+          items:
+            type: object
+        rate:
+          type: number
+        name: 
+          type: string
+        category: 
+          type: string
+          default: "PRDODUCT CATEGORY"
+        price: 
+          type: string
+          default: 0
+        description: 
+          type: string
+          default: "PRDODUCT DESCRIPTION"
+        image: 
+          type: array
+          items:
+            type: string
+        status: 
+          type: string
+        sender: 
+          type: string
+        purchaseCount:
+          type: number
+          default: 0
+    Carousal:
+      type: object
+      properties:
+        image: 
+          type: string
+        filter: 
+          type: object
+    Category:
+      type: object
+      properties:
+        name: 
+          type: string
+    Coupon:
+      type: object
+      properties:
+        name: 
+          type: string
+        coupon: 
+          type: string
+    Order:
+      type: object
+      properties:
+        items: 
+          type: object
+        address: 
+          type: object
+        name: 
+          type: string
+        coupon:
+          type: object
+          default: 
+        email: 
+          type: string
+        price: 
+          type: number
+        status: 
+          type: string
+          default: "Placed"
+    address:
+      type: object
+      properties:
+        location: 
+          type: string
+        city: 
+          type: string
+        pincode: 
+          type: string
+        state: 
+          type: string
+        phone:
+          type: number
